@@ -1,0 +1,1 @@
+# hotel_text_img

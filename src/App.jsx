@@ -426,7 +426,7 @@ function App() {
     ctx.fillStyle = GRAY
     ctx.font = '600 21px Arial, Helvetica, sans-serif'
     ctx.fillText(
-      'Please do not reply by text. This number is not monitored.',
+      'Please do not reply by text. This number is not monitored for texts.',
       IMAGE_WIDTH / 2,
       2820,
     )

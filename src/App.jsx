@@ -7,7 +7,7 @@ const WHITE = '#FFFFFF'
 const GRAY = '#696864'
 
 const IMAGE_WIDTH = 1080
-const IMAGE_HEIGHT = 2900
+const IMAGE_HEIGHT = 2700
 
 function App() {
   const canvasRef = useRef(null)
@@ -196,81 +196,54 @@ function App() {
     ctx.fillRect(0, 0, IMAGE_WIDTH, IMAGE_HEIGHT)
 
     /*
-      Generic opening for the MMS preview.
-    */
-    ctx.textAlign = 'center'
-    ctx.textBaseline = 'top'
-
-    ctx.fillStyle = BLACK
-    ctx.font = '900 62px Arial, Helvetica, sans-serif'
-    ctx.fillText(
-      'WELCOME',
-      IMAGE_WIDTH / 2,
-      72,
-    )
-
-    /*
-      Larger and darker subtitle.
-    */
-    ctx.fillStyle = BLACK
-    ctx.font = '600 36px Arial, Helvetica, sans-serif'
-    ctx.fillText(
-      'Here are your room assignment and arrival instructions.',
-      IMAGE_WIDTH / 2,
-      158,
-    )
-
-    /*
-      Main Crescent Hotel logo.
-    */
-    drawLogo(
-      ctx,
-      logo,
-      395,
-      500,
-      270,
-    )
-
-    /*
-      Room Assignment heading.
+      Room Assignment appears at the very top so it is
+      visible in the Messages image preview.
     */
     drawSectionHeading(
       ctx,
       'YOUR ROOM ASSIGNMENT',
-      575,
+      55,
     )
 
     /*
-      Room Assignment section:
-      black typography on white.
+      Room and lockbox number.
     */
-    const assignmentY = 665
-    const assignmentHeight = 350
+    const assignmentY = 140
+    const assignmentHeight = 280
 
     ctx.textAlign = 'left'
     ctx.textBaseline = 'middle'
     ctx.fillStyle = BLACK
-
     ctx.font = '900 44px Arial, Helvetica, sans-serif'
+
     ctx.fillText(
       'ROOM & LOCKBOX # :',
       70,
       assignmentY + assignmentHeight / 2,
     )
 
-   
-
     /*
       Large shared room and lockbox number.
     */
-    ctx.fillStyle = BLACK
     ctx.textAlign = 'center'
     ctx.textBaseline = 'middle'
-    ctx.font = '900 210px Arial, Helvetica, sans-serif'
+    ctx.font = '900 195px Arial, Helvetica, sans-serif'
+
     ctx.fillText(
       roomNumber,
-      815,
+      825,
       assignmentY + assignmentHeight / 2,
+    )
+
+    /*
+      Crescent Hotel logo directly below the assignment.
+    */
+    drawLogo(
+      ctx,
+      logo,
+      590,
+      500,
+      270,
     )
 
     /*
@@ -279,13 +252,13 @@ function App() {
     drawSectionHeading(
       ctx,
       'ACCESS INSTRUCTIONS',
-      1110,
+      760,
     )
 
     /*
-      Full-width muted-black instruction block.
+      Full-width muted-black instruction section.
     */
-    const instructionsY = 1200
+    const instructionsY = 850
     const topPadding = 70
     const maximumInstructionsHeight = 1200
 
@@ -344,8 +317,7 @@ function App() {
     )
 
     /*
-      The space below step 05 is exactly the same as
-      the space above step 01.
+      Equal padding above step 01 and below step 05.
     */
     const instructionsBottom =
       stepResult.contentBottom + topPadding
@@ -354,7 +326,7 @@ function App() {
       instructionsY + maximumInstructionsHeight
 
     /*
-      Remove unused black space beneath the balanced box.
+      Remove unused black space below the balanced section.
     */
     ctx.fillStyle = WHITE
     ctx.fillRect(
@@ -365,7 +337,7 @@ function App() {
     )
 
     /*
-      Help section on white.
+      Help section.
     */
     const helpY = instructionsBottom + 100
 
@@ -381,6 +353,7 @@ function App() {
 
     ctx.fillStyle = BLACK
     ctx.font = '900 62px Arial, Helvetica, sans-serif'
+
     ctx.fillText(
       'NEED HELP?',
       200,
@@ -388,6 +361,7 @@ function App() {
     )
 
     ctx.font = '900 39px Arial, Helvetica, sans-serif'
+
     ctx.fillText(
       'During store hours:',
       75,
@@ -395,6 +369,7 @@ function App() {
     )
 
     ctx.font = '400 37px Arial, Helvetica, sans-serif'
+
     ctx.fillText(
       'Go inside The Crescent Store.',
       75,
@@ -402,6 +377,7 @@ function App() {
     )
 
     ctx.font = '900 39px Arial, Helvetica, sans-serif'
+
     ctx.fillText(
       'After hours:',
       75,
@@ -409,6 +385,7 @@ function App() {
     )
 
     ctx.font = '400 37px Arial, Helvetica, sans-serif'
+
     wrapText(
       ctx,
       'Press the button on the Ring camera beside the lockboxes.',
@@ -425,10 +402,11 @@ function App() {
     ctx.textBaseline = 'top'
     ctx.fillStyle = GRAY
     ctx.font = '600 21px Arial, Helvetica, sans-serif'
+
     ctx.fillText(
-'Please do not reply. This number is not monitored for text messages.',
+      'Please do not reply. This number is not monitored for text messages.',
       IMAGE_WIDTH / 2,
-      2820,
+      2620,
     )
   }
 
@@ -455,7 +433,7 @@ function App() {
     })
   }
 
-  async function saveOrShareImage() {
+  async function saveToPhotos() {
     if (!imageReady) return
 
     setStatus('')
@@ -469,8 +447,9 @@ function App() {
       })
 
       /*
-        On iPhone, this opens the Share Sheet.
-        Choose Save Image to place it in Photos.
+        On iPhone, Apple requires the person to choose
+        Save Image from the Share Sheet. Only the PNG is
+        included—there is no title or extra message text.
       */
       if (
         navigator.share &&
@@ -480,11 +459,10 @@ function App() {
         try {
           await navigator.share({
             files: [file],
-            title: `Crescent Hotel — Room ${roomNumber}`,
           })
 
           setStatus(
-            'The image was opened in your Share Sheet.',
+            'Choose Save Image to place it in Photos.',
           )
 
           return
@@ -622,9 +600,8 @@ function App() {
         </h1>
 
         <p className="intro">
-          Choose a room to create its reusable arrival
-          instruction image. The lockbox number automatically
-          matches the room.
+          Choose a room and save its reusable arrival
+          instructions to your iPhone Photos.
         </p>
       </header>
 
@@ -658,9 +635,9 @@ function App() {
             type="button"
             className="primary-button"
             disabled={!imageReady}
-            onClick={saveOrShareImage}
+            onClick={saveToPhotos}
           >
-            SAVE / SHARE IMAGE
+            SAVE TO PHOTOS
           </button>
 
           <button
@@ -679,10 +656,10 @@ function App() {
           )}
 
           <p className="iphone-note">
-            On iPhone, tap Save / Share Image and choose
-            <strong> Save Image</strong>. If needed, open
-            the full image, press and hold it, then choose
-            Save to Photos.
+            On iPhone, tap Save to Photos and choose
+            <strong> Save Image</strong>. The same menu can
+            also be used to send the image directly through
+            Messages.
           </p>
         </section>
 

@@ -139,14 +139,22 @@ function App() {
       49,
     )
 
-    return Math.max(startY + 88, textBottom) + 48
+    const contentBottom = Math.max(
+      startY + 88,
+      textBottom,
+    )
+
+    return {
+      contentBottom,
+      nextY: contentBottom + 48,
+    }
   }
 
   function drawQuestionIcon(ctx, x, y, size) {
     ctx.save()
 
     ctx.strokeStyle = BLACK
-    ctx.lineWidth = 11
+    ctx.lineWidth = 12
 
     ctx.beginPath()
     ctx.arc(x, y, size / 2, 0, Math.PI * 2)
@@ -239,58 +247,18 @@ function App() {
     const assignmentY = 665
     const assignmentHeight = 350
 
-    /*
-      Thin black lines define this section.
-    */
-    ctx.fillStyle = BLACK
-    ctx.fillRect(
-      0,
-      assignmentY,
-      IMAGE_WIDTH,
-      3,
-    )
-
-    ctx.fillRect(
-      0,
-      assignmentY + assignmentHeight - 3,
-      IMAGE_WIDTH,
-      3,
-    )
-
     ctx.textAlign = 'left'
-    ctx.textBaseline = 'top'
+    ctx.textBaseline = 'middle'
     ctx.fillStyle = BLACK
 
-    ctx.font = '900 46px Arial, Helvetica, sans-serif'
+    ctx.font = '900 44px Arial, Helvetica, sans-serif'
     ctx.fillText(
-      'ROOM #',
-      90,
-      assignmentY + 83,
+      'ROOM & LOCKBOX # :',
+      70,
+      assignmentY + assignmentHeight / 2,
     )
 
-    ctx.fillText(
-      'LOCKBOX #',
-      90,
-      assignmentY + 151,
-    )
-
-    ctx.font = '700 23px Arial, Helvetica, sans-serif'
-    ctx.fillText(
-      'BOTH NUMBERS MATCH',
-      90,
-      assignmentY + 242,
-    )
-
-    /*
-      Black divider between the labels and number.
-    */
-    ctx.fillStyle = BLACK
-    ctx.fillRect(
-      555,
-      assignmentY + 62,
-      2,
-      assignmentHeight - 124,
-    )
+   
 
     /*
       Large shared room and lockbox number.
@@ -301,7 +269,7 @@ function App() {
     ctx.font = '900 210px Arial, Helvetica, sans-serif'
     ctx.fillText(
       roomNumber,
-      800,
+      815,
       assignmentY + assignmentHeight / 2,
     )
 
@@ -316,50 +284,59 @@ function App() {
 
     /*
       Full-width muted-black instruction block.
-      Its lower edge is positioned close to step 05.
     */
     const instructionsY = 1200
-    const instructionsHeight = 1035
+    const topPadding = 70
+    const maximumInstructionsHeight = 1200
 
     ctx.fillStyle = BLACK
     ctx.fillRect(
       0,
       instructionsY,
       IMAGE_WIDTH,
-      instructionsHeight,
+      maximumInstructionsHeight,
     )
 
-    let stepY = instructionsY + 70
+    let stepY = instructionsY + topPadding
+    let stepResult
 
-    stepY = drawInstructionStep(
+    stepResult = drawInstructionStep(
       ctx,
       '01',
       'Find the lockboxes beside the hotel’s side entrance, opposite The Crescent Store.',
       stepY,
     )
 
-    stepY = drawInstructionStep(
+    stepY = stepResult.nextY
+
+    stepResult = drawInstructionStep(
       ctx,
       '02',
       `Use Lockbox ${roomNumber}.`,
       stepY,
     )
 
-    stepY = drawInstructionStep(
+    stepY = stepResult.nextY
+
+    stepResult = drawInstructionStep(
       ctx,
       '03',
       'Enter the last seven digits of your reservation phone number—the XXX-XXXX portion, without the dash. The first digit wakes the lockbox. Do not press another button first.',
       stepY,
     )
 
-    stepY = drawInstructionStep(
+    stepY = stepResult.nextY
+
+    stepResult = drawInstructionStep(
       ctx,
       '04',
       'Press the unlock button. If you have trouble, press unlock to clear the lock and start over.',
       stepY,
     )
 
-    drawInstructionStep(
+    stepY = stepResult.nextY
+
+    stepResult = drawInstructionStep(
       ctx,
       '05',
       `Take the key card. It opens the side entrance and Room ${roomNumber}. Guest rooms are upstairs.`,
@@ -367,57 +344,78 @@ function App() {
     )
 
     /*
+      The space below step 05 is exactly the same as
+      the space above step 01.
+    */
+    const instructionsBottom =
+      stepResult.contentBottom + topPadding
+
+    const maximumInstructionsBottom =
+      instructionsY + maximumInstructionsHeight
+
+    /*
+      Remove unused black space beneath the balanced box.
+    */
+    ctx.fillStyle = WHITE
+    ctx.fillRect(
+      0,
+      instructionsBottom,
+      IMAGE_WIDTH,
+      maximumInstructionsBottom - instructionsBottom,
+    )
+
+    /*
       Help section on white.
     */
-    const helpY = 2345
+    const helpY = instructionsBottom + 100
 
     drawQuestionIcon(
       ctx,
-      118,
-      helpY + 60,
-      104,
+      122,
+      helpY + 66,
+      112,
     )
 
     ctx.textAlign = 'left'
     ctx.textBaseline = 'top'
 
     ctx.fillStyle = BLACK
-    ctx.font = '900 55px Arial, Helvetica, sans-serif'
+    ctx.font = '900 62px Arial, Helvetica, sans-serif'
     ctx.fillText(
       'NEED HELP?',
-      190,
+      200,
       helpY + 25,
     )
 
-    ctx.font = '900 31px Arial, Helvetica, sans-serif'
+    ctx.font = '900 39px Arial, Helvetica, sans-serif'
     ctx.fillText(
       'During store hours:',
       75,
-      helpY + 150,
+      helpY + 165,
     )
 
-    ctx.font = '400 30px Arial, Helvetica, sans-serif'
+    ctx.font = '400 37px Arial, Helvetica, sans-serif'
     ctx.fillText(
       'Go inside The Crescent Store.',
       75,
-      helpY + 193,
+      helpY + 217,
     )
 
-    ctx.font = '900 31px Arial, Helvetica, sans-serif'
+    ctx.font = '900 39px Arial, Helvetica, sans-serif'
     ctx.fillText(
       'After hours:',
       75,
-      helpY + 255,
+      helpY + 290,
     )
 
-    ctx.font = '400 30px Arial, Helvetica, sans-serif'
+    ctx.font = '400 37px Arial, Helvetica, sans-serif'
     wrapText(
       ctx,
       'Press the button on the Ring camera beside the lockboxes.',
       75,
-      helpY + 298,
-      870,
-      41,
+      helpY + 342,
+      895,
+      49,
     )
 
     /*
@@ -426,7 +424,7 @@ function App() {
     ctx.textAlign = 'center'
     ctx.textBaseline = 'top'
     ctx.fillStyle = GRAY
-    ctx.font = '600 19px Arial, Helvetica, sans-serif'
+    ctx.font = '600 21px Arial, Helvetica, sans-serif'
     ctx.fillText(
       'Please do not reply by text. This number is not monitored.',
       IMAGE_WIDTH / 2,

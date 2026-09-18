@@ -7,7 +7,7 @@ const WHITE = '#FFFFFF'
 const GRAY = '#696864'
 
 const IMAGE_WIDTH = 1080
-const IMAGE_HEIGHT = 2700
+const IMAGE_HEIGHT = 3000
 
 function App() {
   const canvasRef = useRef(null)
@@ -158,6 +158,27 @@ function App() {
     ctx.fillText(text, IMAGE_WIDTH / 2, y)
   }
 
+  function drawDashedLine(
+    ctx,
+    startX,
+    startY,
+    endX,
+    endY,
+  ) {
+    ctx.save()
+
+    ctx.strokeStyle = BLACK
+    ctx.lineWidth = 2
+    ctx.setLineDash([14, 12])
+
+    ctx.beginPath()
+    ctx.moveTo(startX, startY)
+    ctx.lineTo(endX, endY)
+    ctx.stroke()
+
+    ctx.restore()
+  }
+
   function drawInstructionImage(logo) {
     const canvas = canvasRef.current
 
@@ -175,20 +196,31 @@ function App() {
     ctx.fillRect(0, 0, IMAGE_WIDTH, IMAGE_HEIGHT)
 
     /*
-      Room Assignment appears first so it remains
-      visible in the Messages image preview.
+      Extra white space above the assignment heading.
     */
     drawSectionHeading(
       ctx,
       'YOUR ROOM ASSIGNMENT',
-      40,
+      120,
     )
 
     /*
-      Room and lockbox number.
+      Dashed line below the Room Assignment heading.
     */
-    const assignmentY = 115
-    const assignmentHeight = 250
+    drawDashedLine(
+      ctx,
+      70,
+      205,
+      IMAGE_WIDTH - 70,
+      205,
+    )
+
+    /*
+      Room Assignment section with even padding
+      above and below its contents.
+    */
+    const assignmentY = 235
+    const assignmentHeight = 270
 
     ctx.textAlign = 'left'
     ctx.textBaseline = 'middle'
@@ -202,20 +234,60 @@ function App() {
     )
 
     /*
-      Large shared room and lockbox number.
+      Mailchimp-inspired muted-black number block.
     */
+    const numberBlockX = 700
+    const numberBlockY = assignmentY
+    const numberBlockWidth = 270
+    const numberBlockHeight = 270
+
+    ctx.fillStyle = BLACK
+    ctx.fillRect(
+      numberBlockX,
+      numberBlockY,
+      numberBlockWidth,
+      numberBlockHeight,
+    )
+
+    ctx.fillStyle = WHITE
     ctx.textAlign = 'center'
     ctx.textBaseline = 'middle'
-    ctx.font = '900 195px Arial, Helvetica, sans-serif'
+    ctx.font = '900 190px Arial, Helvetica, sans-serif'
 
     ctx.fillText(
       roomNumber,
-      825,
-      assignmentY + assignmentHeight / 2,
+      numberBlockX + numberBlockWidth / 2,
+      numberBlockY + numberBlockHeight / 2,
     )
 
     /*
-      Small instruction above the logo.
+      Vertical dashed line between the colon and
+      the muted-black room-number block.
+    */
+    drawDashedLine(
+      ctx,
+      640,
+      assignmentY + 40,
+      640,
+      assignmentY + assignmentHeight - 40,
+    )
+
+    /*
+      Matching dashed line below the Room Assignment section.
+      Padding above the line matches the padding below the
+      upper dashed line.
+    */
+    drawDashedLine(
+      ctx,
+      70,
+      535,
+      IMAGE_WIDTH - 70,
+      535,
+    )
+
+    /*
+      Small instruction with separation from
+      the Room Assignment section.
     */
     ctx.textAlign = 'center'
     ctx.textBaseline = 'top'
@@ -225,19 +297,18 @@ function App() {
     ctx.fillText(
       'TAP IMAGE TO EXPAND',
       IMAGE_WIDTH / 2,
-      405,
+      625,
     )
 
     /*
-      Crescent Hotel logo positioned prominently within
-      the top portion of the image preview.
+      Crescent Hotel logo positioned below the tap message.
     */
     drawLogo(
       ctx,
       logo,
-      605,
-      575,
-      330,
+      830,
+      590,
+      340,
     )
 
     /*
@@ -246,13 +317,13 @@ function App() {
     drawSectionHeading(
       ctx,
       'ACCESS INSTRUCTIONS',
-      810,
+      1040,
     )
 
     /*
       Full-width muted-black instruction section.
     */
-    const instructionsY = 900
+    const instructionsY = 1130
     const topPadding = 70
     const maximumInstructionsHeight = 1200
 
@@ -331,13 +402,12 @@ function App() {
     )
 
     /*
-      Help section moved lower to use the available space.
+      Help section.
     */
-    const helpY = instructionsBottom + 165
+    const helpY = instructionsBottom + 150
 
     ctx.textAlign = 'left'
     ctx.textBaseline = 'top'
-
     ctx.fillStyle = BLACK
     ctx.font = '900 62px Arial, Helvetica, sans-serif'
 
@@ -383,7 +453,7 @@ function App() {
     )
 
     /*
-      Unmonitored-text warning placed closer to the Help section.
+      Unmonitored-text warning.
     */
     ctx.textAlign = 'center'
     ctx.textBaseline = 'top'
@@ -393,8 +463,27 @@ function App() {
     ctx.fillText(
       'Please do not reply. This number is not monitored for text messages.',
       IMAGE_WIDTH / 2,
-      2620,
+      2910,
     )
+
+    /*
+      Very thin solid border around the entire image.
+      It is drawn last so every edge remains visible.
+    */
+    ctx.save()
+
+    ctx.strokeStyle = BLACK
+    ctx.lineWidth = 2
+    ctx.setLineDash([])
+
+    ctx.strokeRect(
+      1,
+      1,
+      IMAGE_WIDTH - 2,
+      IMAGE_HEIGHT - 2,
+    )
+
+    ctx.restore()
   }
 
   function getFileName() {

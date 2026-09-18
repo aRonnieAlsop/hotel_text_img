@@ -150,27 +150,6 @@ function App() {
     }
   }
 
-  function drawQuestionIcon(ctx, x, y, size) {
-    ctx.save()
-
-    ctx.strokeStyle = BLACK
-    ctx.lineWidth = 12
-
-    ctx.beginPath()
-    ctx.arc(x, y, size / 2, 0, Math.PI * 2)
-    ctx.stroke()
-
-    ctx.fillStyle = BLACK
-    ctx.textAlign = 'center'
-    ctx.textBaseline = 'middle'
-    ctx.font =
-      `900 ${Math.round(size * 0.63)}px Arial, Helvetica, sans-serif`
-
-    ctx.fillText('?', x, y + 3)
-
-    ctx.restore()
-  }
-
   function drawSectionHeading(ctx, text, y) {
     ctx.textAlign = 'center'
     ctx.textBaseline = 'top'
@@ -196,20 +175,20 @@ function App() {
     ctx.fillRect(0, 0, IMAGE_WIDTH, IMAGE_HEIGHT)
 
     /*
-      Room Assignment appears at the very top so it is
+      Room Assignment appears first so it remains
       visible in the Messages image preview.
     */
     drawSectionHeading(
       ctx,
       'YOUR ROOM ASSIGNMENT',
-      55,
+      40,
     )
 
     /*
       Room and lockbox number.
     */
-    const assignmentY = 140
-    const assignmentHeight = 280
+    const assignmentY = 115
+    const assignmentHeight = 250
 
     ctx.textAlign = 'left'
     ctx.textBaseline = 'middle'
@@ -236,14 +215,29 @@ function App() {
     )
 
     /*
-      Crescent Hotel logo directly below the assignment.
+      Small instruction above the logo.
+    */
+    ctx.textAlign = 'center'
+    ctx.textBaseline = 'top'
+    ctx.fillStyle = GRAY
+    ctx.font = '700 21px Arial, Helvetica, sans-serif'
+
+    ctx.fillText(
+      'TAP IMAGE TO EXPAND',
+      IMAGE_WIDTH / 2,
+      405,
+    )
+
+    /*
+      Crescent Hotel logo positioned prominently within
+      the top portion of the image preview.
     */
     drawLogo(
       ctx,
       logo,
-      590,
-      500,
-      270,
+      605,
+      575,
+      330,
     )
 
     /*
@@ -252,13 +246,13 @@ function App() {
     drawSectionHeading(
       ctx,
       'ACCESS INSTRUCTIONS',
-      760,
+      810,
     )
 
     /*
       Full-width muted-black instruction section.
     */
-    const instructionsY = 850
+    const instructionsY = 900
     const topPadding = 70
     const maximumInstructionsHeight = 1200
 
@@ -317,7 +311,7 @@ function App() {
     )
 
     /*
-      Equal padding above step 01 and below step 05.
+      Equal spacing above step 01 and below step 05.
     */
     const instructionsBottom =
       stepResult.contentBottom + topPadding
@@ -337,16 +331,9 @@ function App() {
     )
 
     /*
-      Help section.
+      Help section moved lower to use the available space.
     */
-    const helpY = instructionsBottom + 100
-
-    drawQuestionIcon(
-      ctx,
-      122,
-      helpY + 66,
-      112,
-    )
+    const helpY = instructionsBottom + 165
 
     ctx.textAlign = 'left'
     ctx.textBaseline = 'top'
@@ -356,8 +343,8 @@ function App() {
 
     ctx.fillText(
       'NEED HELP?',
-      200,
-      helpY + 25,
+      75,
+      helpY,
     )
 
     ctx.font = '900 39px Arial, Helvetica, sans-serif'
@@ -365,7 +352,7 @@ function App() {
     ctx.fillText(
       'During store hours:',
       75,
-      helpY + 165,
+      helpY + 135,
     )
 
     ctx.font = '400 37px Arial, Helvetica, sans-serif'
@@ -373,7 +360,7 @@ function App() {
     ctx.fillText(
       'Go inside The Crescent Store.',
       75,
-      helpY + 217,
+      helpY + 187,
     )
 
     ctx.font = '900 39px Arial, Helvetica, sans-serif'
@@ -381,7 +368,7 @@ function App() {
     ctx.fillText(
       'After hours:',
       75,
-      helpY + 290,
+      helpY + 260,
     )
 
     ctx.font = '400 37px Arial, Helvetica, sans-serif'
@@ -390,13 +377,13 @@ function App() {
       ctx,
       'Press the button on the Ring camera beside the lockboxes.',
       75,
-      helpY + 342,
+      helpY + 312,
       895,
       49,
     )
 
     /*
-      Unmonitored-text warning.
+      Unmonitored-text warning placed closer to the Help section.
     */
     ctx.textAlign = 'center'
     ctx.textBaseline = 'top'

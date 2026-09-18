@@ -274,8 +274,6 @@ function App() {
 
     /*
       Matching dashed line below the Room Assignment section.
-      Padding above the line matches the padding below the
-      upper dashed line.
     */
     drawDashedLine(
       ctx,
@@ -286,8 +284,8 @@ function App() {
     )
 
     /*
-      Small instruction with separation from
-      the Room Assignment section.
+      Small instruction moved lower so it appears
+      in the phone's collapsed image preview.
     */
     ctx.textAlign = 'center'
     ctx.textBaseline = 'top'
@@ -297,7 +295,7 @@ function App() {
     ctx.fillText(
       'TAP IMAGE TO EXPAND',
       IMAGE_WIDTH / 2,
-      625,
+      855,
     )
 
     /*
@@ -306,7 +304,7 @@ function App() {
     drawLogo(
       ctx,
       logo,
-      830,
+      1060,
       590,
       340,
     )
@@ -317,13 +315,13 @@ function App() {
     drawSectionHeading(
       ctx,
       'ACCESS INSTRUCTIONS',
-      1040,
+      1270,
     )
 
     /*
       Full-width muted-black instruction section.
     */
-    const instructionsY = 1130
+    const instructionsY = 1360
     const topPadding = 70
     const maximumInstructionsHeight = 1200
 
@@ -468,7 +466,6 @@ function App() {
 
     /*
       Very thin solid border around the entire image.
-      It is drawn last so every edge remains visible.
     */
     ctx.save()
 
@@ -524,8 +521,7 @@ function App() {
 
       /*
         On iPhone, Apple requires the person to choose
-        Save Image from the Share Sheet. Only the PNG is
-        included—there is no title or extra message text.
+        Save Image from the Share Sheet.
       */
       if (
         navigator.share &&
